@@ -214,6 +214,6 @@ php artisan serve
 
 ## Tim
 - M.Teguh Gabita (200102078) — Ketua Tim / Backend Lead (Setup, Migration & Seeder, Autentikasi, Role & Permission, Git Workflow)
-- [Nama Anggota 2] — CRUD Mobil & Kategori
-- [Nama Anggota 3] — CRUD Pelanggan & Booking
-- [Nama Anggota 4] — Dashboard, REST API, UI/UX & QA/Dokumentasi
+- Fahmy Muhammad Nurfadilah — CRUD Mobil & Kategori
+- Fauzi Ardiansyah — CRUD Pelanggan & Booking
+- Luthfi Rizalul Fikri — Dashboard, REST API, UI/UX & QA/Dokumentasi
