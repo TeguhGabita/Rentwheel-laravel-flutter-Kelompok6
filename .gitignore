@@ -15,19 +15,19 @@ backend/public/build/
 backend/bootstrap/cache/*.php
 
 # ===== Flutter (frontend/) =====
-mobile/.dart_tool/
-mobile/.flutter-plugins
-mobile/.flutter-plugins-dependencies
-mobile/.packages
-mobile/build/
-mobile/.pub-cache/
-mobile/.pub/
-mobile/ios/Pods/
-mobile/ios/.symlinks/
-mobile/android/.gradle/
-mobile/android/local.properties
-mobile/android/**/gradle-wrapper.jar
-
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/build/
+frontend/.pub-cache/
+frontend/.pub/
+frontend/ios/Pods/
+frontend/ios/.symlinks/
+frontend/android/.gradle/
+frontend/android/local.properties
+frontend/android/**/gradle-wrapper.jar
+    
 # ===== General =====
 .DS_Store
 .idea/
