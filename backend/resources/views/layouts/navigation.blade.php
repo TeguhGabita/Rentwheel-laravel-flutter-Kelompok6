@@ -4,17 +4,38 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                <div class="shrink-0 flex items-center gap-2">
+                    <a href="{{ auth()->user()->hasRole('admin') ? route('dashboard') : route('beranda') }}"
+                       class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16l-2 2m0 0l-2-2m2 2V9a2 2 0 012-2h8a2 2 0 012 2v9m-12 0h12m-2 0l2 2m-2-2l2-2" />
+                            </svg>
+                        </div>
+                        <span class="font-semibold text-neutral-900 text-[15px]">RentWheel</span>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if (auth()->user()->hasRole('admin'))
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('beranda')" :active="request()->routeIs('beranda')">
+                            {{ __('Beranda') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('mobil.index')" :active="request()->routeIs('mobil.*')">
+                            {{ __('Cari Mobil') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.*')">
+                            {{ __('Booking Saya') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.*')">
+                            {{ __('Pembayaran') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -67,9 +88,24 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if (auth()->user()->hasRole('admin'))
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('beranda')" :active="request()->routeIs('beranda')">
+                    {{ __('Beranda') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('mobil.index')" :active="request()->routeIs('mobil.*')">
+                    {{ __('Cari Mobil') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.*')">
+                    {{ __('Booking Saya') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.*')">
+                    {{ __('Pembayaran') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

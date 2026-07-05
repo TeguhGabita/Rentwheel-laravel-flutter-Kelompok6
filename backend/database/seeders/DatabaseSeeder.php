@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             MobilSeeder::class,
             PelangganSeeder::class,
+            BookingSeeder::class,
         ]);
     }
 }
