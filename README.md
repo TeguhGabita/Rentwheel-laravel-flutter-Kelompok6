@@ -259,9 +259,9 @@ Sesuaikan `baseUrl` di `lib/services/api_service.dart` dengan alamat backend:
 | M. Teguh Gabita            | 3 Juli 2026  | 22:50       | Setup environment Laragon & MySQL, perbaikan koneksi database (access denied & unknown database), pembuatan database `rentwheel`, review ERD awal, konfigurasi Mailtrap |
 | M. Teguh Gabita            | 4 Juli 2026  | 17:05       | Restrukturisasi ERD — hapus tabel `pelanggans`, konsolidasi ke `users` dengan role Admin/User; migrasi database; pembuatan REST API (`AuthController`, `MobilController`, `BookingController`, `PembayaranController`) untuk integrasi Flutter via Sanctum |
 | M. Teguh Gabita            | 5 Juli 2026  | 14:10       | Setup project, debugging REST API (autentikasi, testing endpoint) via Postman, setup database, tampilan dashboard, push GitHub |
-| Fahmy Muhammad Nurfadilah  |              |             |                                                                           |
+| Fauzi Ardiansyah           | 9 Juli 2026  | 22:39       | Menambahkan fitur CRUD admin pada sistem web dan tampilan dasboard admin                                                                          |
 | Luthfi Rizalul Fikri       |              |             |                                                                           |
-| Fauzi Ardiansyah           |              |             |                                                                           |
+| Fahmy Muhammad Nurfadilah           |              |             |                                                                           |
 
 
 ## Tim
