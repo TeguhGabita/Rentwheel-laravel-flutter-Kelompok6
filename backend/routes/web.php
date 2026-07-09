@@ -5,6 +5,15 @@ use App\Http\Controllers\MobilController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PembayaranController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::resource('admin/users', UserController::class)->names('admin.users');
+});
 
 Route::get('/', function () {
     return view('welcome');
