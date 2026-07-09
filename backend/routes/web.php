@@ -9,6 +9,15 @@ use App\Http\Controllers\Admin\KategoriMobilController as AdminKategoriMobilCont
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PembayaranController as AdminPembayaranController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::resource('admin/users', UserController::class)->names('admin.users');
+});
 
 Route::get('/', function () {
     return view('welcome');
