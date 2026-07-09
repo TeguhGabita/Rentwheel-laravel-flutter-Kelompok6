@@ -28,10 +28,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mobil', [MobilController::class, 'index'])->name('mobil.index');
     Route::get('/mobil/{mobil}', [MobilController::class, 'show'])->name('mobil.show');
 
+    // Admin CRUD untuk mobil
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/mobil/create', [MobilController::class, 'create'])->name('mobil.create');
+        Route::post('/mobil', [MobilController::class, 'store'])->name('mobil.store');
+        Route::get('/mobil/{mobil}/edit', [MobilController::class, 'edit'])->name('mobil.edit');
+        Route::put('/mobil/{mobil}', [MobilController::class, 'update'])->name('mobil.update');
+        Route::delete('/mobil/{mobil}', [MobilController::class, 'destroy'])->name('mobil.destroy');
+    });
+
     Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
     Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
+    Route::delete('/booking/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+    Route::post('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::get('/pembayaran/create', [PembayaranController::class, 'create'])->name('pembayaran.create');

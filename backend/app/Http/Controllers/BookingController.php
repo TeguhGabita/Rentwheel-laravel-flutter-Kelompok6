@@ -66,6 +66,27 @@ class BookingController extends Controller
         return view('booking.show', compact('booking'));
     }
 
+public function destroy(Booking $booking)
+{
+    $this->authorizeBooking($booking);
+
+    // Hapus data pembayaran jika ada
+    if ($booking->pembayaran) {
+        $booking->pembayaran->delete();
+    }
+
+    // Hapus booking
+    $booking->delete();
+
+    return redirect()->route('booking.index')
+        ->with('status', 'Booking berhasil dibatalkan.');
+}
+
+    public function cancel(Booking $booking)
+    {
+        return $this->destroy($booking);
+    }
+
     private function authorizeBooking(Booking $booking)
     {
         if (! auth()->user()->hasRole('admin') && $booking->user_id !== auth()->id()) {
@@ -73,3 +94,4 @@ class BookingController extends Controller
         }
     }
 }
+
