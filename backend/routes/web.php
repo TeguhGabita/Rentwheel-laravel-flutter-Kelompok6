@@ -4,6 +4,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\Admin\MobilController as AdminMobilController;
+use App\Http\Controllers\Admin\KategoriMobilController as AdminKategoriMobilController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\PembayaranController as AdminPembayaranController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,6 +40,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::get('/pembayaran/create', [PembayaranController::class, 'create'])->name('pembayaran.create');
     Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('mobil', AdminMobilController::class)->except('show');
+    Route::resource('kategori', AdminKategoriMobilController::class)->except('show');
+    Route::resource('booking', AdminBookingController::class)->except('show');
+    Route::resource('pembayaran', AdminPembayaranController::class)->except('show');
 });
 
 require __DIR__.'/auth.php';
