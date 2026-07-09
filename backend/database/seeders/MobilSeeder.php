@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Mobil;
-use App\Models\Kategori;
+use App\Models\KategoriMobil;
 
 class MobilSeeder extends Seeder
 {
     public function run(): void
     {
-        $cityCar = Kategori::where('nama_kategori', 'City Car')->first();
-        $mpv = Kategori::where('nama_kategori', 'MPV')->first();
-        $suv = Kategori::where('nama_kategori', 'SUV')->first();
+        $cityCar = KategoriMobil::where('nama_kategori', 'City Car')->first();
+        $mpv = KategoriMobil::where('nama_kategori', 'MPV')->first();
+        $suv = KategoriMobil::where('nama_kategori', 'SUV')->first();
 
         $mobils = [
             [

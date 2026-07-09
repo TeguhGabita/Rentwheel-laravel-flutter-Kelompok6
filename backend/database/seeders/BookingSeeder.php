@@ -13,7 +13,7 @@ class BookingSeeder extends Seeder
     public function run(): void
     {
         $mobils = Mobil::all();
-        $pelanggans = Pelanggan::all();
+        $pelanggans = User::all();
         $admin = User::role('admin')->first();
 
         $bookings = [
