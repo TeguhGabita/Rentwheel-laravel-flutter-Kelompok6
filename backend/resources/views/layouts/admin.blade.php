@@ -59,14 +59,14 @@
             <!-- Menu utama (horizontal) -->
             <nav class="px-6 flex items-center gap-1 overflow-x-auto">
                 <a href="{{ route('dashboard') }}"
-                   class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-amber-400 text-amber-400 whitespace-nowrap">
+                   class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 {{ request()->routeIs('dashboard') ? 'border-amber-400 text-amber-400' : 'border-transparent text-slate-400 hover:text-white' }} transition-colors whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
                     </svg>
                     Dashboard
                 </a>
 
-                <a href="#"
+                <a href="{{ route('admin.mobil.index') }}"
                    class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition-colors whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.5 13.5V9.75a1.5 1.5 0 01.44-1.06l2.12-2.12A1.5 1.5 0 018.12 6h7.76a1.5 1.5 0 011.06.44l2.12 2.12a1.5 1.5 0 01.44 1.06v3.75m-16.5 0h16.5m-16.5 0a1.5 1.5 0 00-1.5 1.5v2.25a1.5 1.5 0 001.5 1.5h.75a1.5 1.5 0 001.5-1.5v-.75h11.5v.75a1.5 1.5 0 001.5 1.5h.75a1.5 1.5 0 001.5-1.5V15a1.5 1.5 0 00-1.5-1.5"/>
@@ -74,23 +74,23 @@
                     Data Mobil
                 </a>
 
-                <a href="#"
-                   class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('admin.laporan.index') }}"
+                   class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 {{ request()->routeIs('admin.laporan.*') ? 'border-amber-400 text-amber-400' : 'border-transparent text-slate-400 hover:text-white' }} transition-colors whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .984.75 1.75 1.972 1.75.23 0 .456-.044.782-.128A48.408 48.408 0 016.892 6.108V2.892m9.216 0v5.6m3 .397a5.338 5.338 0 00-5.6 5.6v3.75a6.011 6.011 0 003.139 5.338c1.712.895 3.891.84 5.823-.066A6.011 6.011 0 0021 16.892v-3.75a5.338 5.338 0 00-5.784-5.6z"/>
                     </svg>
-                    Booking
+                    Laporan
                 </a>
 
-                <a href="#"
-                   class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('admin.users.index') }}"
+                   class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 {{ request()->routeIs('admin.users.*') ? 'border-amber-400 text-amber-400' : 'border-transparent text-slate-400 hover:text-white' }} transition-colors whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
                     </svg>
-                    Pelanggan
+                    Manajemen User
                 </a>
 
-                <a href="#"
+                <a href="{{ route('admin.kategori.index') }}"
                    class="flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white transition-colors whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/>

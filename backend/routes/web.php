@@ -4,15 +4,24 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\MobilController as AdminMobilController;
+use App\Http\Controllers\Admin\KategoriMobilController as AdminKategoriMobilController;
+use App\Http\Controllers\Admin\LaporanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified', 'role:admin'])->name('dashboard');
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::resource('admin/users', UserController::class)->names('admin.users');
+});
 
 Route::get('/beranda', function () {
     return view('beranda.index');
@@ -36,6 +45,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::get('/pembayaran/create', [PembayaranController::class, 'create'])->name('pembayaran.create');
     Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('mobil', AdminMobilController::class)->except('show');
+    Route::resource('kategori', AdminKategoriMobilController::class)->except('show');
+    
+    // Laporan routes (includes pembayaran)
+    Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('laporan/pembayaran', [LaporanController::class, 'pembayaran'])->name('laporan.pembayaran');
+    Route::post('laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
 });
 
 require __DIR__.'/auth.php';

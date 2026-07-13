@@ -1,0 +1,46 @@
+LAPORAN PROGRESS
+Proyek RentWheel — Aplikasi Sewa Mobil (Laravel + Flutter)
+
+						Kelompok 6
+Nama Proyek	RentWheel — Sistem Rental  Mobil (Backend Laravel + Frontend Flutter)
+Kelompok	Kelompok 6
+Tanggal Laporan	6 Juli 2026
+Jenis Laporan	Laporan Progress (bukan laporan akhir)
+Repository GitHub	https://github.com/TeguhGabita/Rentwheel-laravel-flutter-Kelompok6
+
+1. Ringkasan
+Proyek RentWheel merupakan aplikasi sewa mobil yang terdiri dari dua bagian utama: backend berbasis Laravel (menyediakan sistem autentikasi, manajemen data mobil, booking, dan pembayaran melalui REST API) serta frontend mobile berbasis Flutter yang mengonsumsi API tersebut. Laporan ini merangkum progress terakhir, kendala yang dihadapi, dan rencana pengerjaan ke depan.
+2. Progress Backend (Laravel)
+2.1 Autentikasi & API
+☑ Endpoint register, login, logout, dan me (data user) melalui Laravel Sanctum
+☑ Endpoint API untuk data mobil (index, show)
+☑ Endpoint API untuk booking (index, store, show)
+☑ Endpoint API untuk pembayaran (store)
+☑ Endpoint API untuk kategori mobil (index)
+2.2 Panel Web Admin/User (Blade + Tailwind)
+☑ Halaman login & register (guest layout)
+☑ Layout dashboard admin dan layout user
+☑ Controller CRUD untuk Booking, Mobil, Pembayaran, Profile (struktur sudah ada)
+☑ Penyesuaian tampilan (migrasi ke Tailwind CSS v4) — sempat ada kendala konfigurasi, sudah diperbaiki
+3. Progress Frontend (Flutter)
+3.1 Yang sudah selesai
+☑ Integrasi API login Laravel ↔ Flutter (ApiService: login, register, logout, simpan token & data user secara lokal)
+☑ Tampilan halaman login (untuk admin maupun user)
+☑ Alur navigasi: admin login → masuk ke Admin Dashboard
+☑ Alur navigasi: user login → masuk ke halaman Beranda (Home)
+☑ Model data user (UserModel) sesuai response API
+3.2 Yang masih dalam proses (menyusul)
+☐ Desain UI/UX untuk seluruh halaman (masih tahap dasar, belum final)
+☐ Fitur CRUD di sisi Flutter (Mobil, Booking, Pembayaran) — baru tersedia fungsi ambil data (GET), belum lengkap create/update/delete di UI
+☐ Halaman detail mobil, form booking, dan riwayat pembayaran di sisi user
+☐ Fitur manajemen data (CRUD) di sisi admin
+4. Kendala
+•	Integrasi awal API Laravel–Flutter sempat membutuhkan penyesuaian base URL (perbedaan antara 127.0.0.1 untuk web dan 10.0.2.2 untuk emulator Android) agar request berhasil terhubung ke backend.
+•	Sempat terjadi konflik versi Tailwind CSS (v3 dan v4 terpasang bersamaan) pada panel web yang menyebabkan tampilan tidak ter-style dengan benar; sudah diperbaiki dengan menyesuaikan konfigurasi Vite dan import CSS.
+•	Desain UI/UX dan fitur CRUD di sisi Flutter belum selesai sepenuhnya karena pembagian waktu tim masih difokuskan pada penyelesaian alur autentikasi terlebih dahulu.
+5. Rencana Ke Depan
+•	Menyelesaikan desain UI/UX untuk seluruh halaman Flutter (beranda, detail mobil, booking, pembayaran, profil).
+•	Melengkapi fitur CRUD di sisi Flutter, khususnya untuk booking dan pembayaran dari sisi user, serta manajemen data dari sisi admin.
+•	Melakukan pengujian integrasi menyeluruh antara Flutter dan API Laravel untuk seluruh alur (booking, pembayaran, riwayat transaksi).
+•	Menyusun draft Laporan Akhir dalam format paper IEEE sesuai arahan.
+— dalam tahap pengembangan
