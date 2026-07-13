@@ -9,7 +9,11 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'user']);
+        // Reset cache permission
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        // Buat role admin dan user
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'user']);
     }
 }
