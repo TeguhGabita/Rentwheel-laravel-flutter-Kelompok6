@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Pembayaran;
+use App\Models\User;
+use App\Notifications\PembayaranBaruNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PembayaranController extends Controller
@@ -18,7 +22,16 @@ class PembayaranController extends Controller
             : Pembayaran::whereHas('booking', fn ($q) => $q->where('user_id', $user->id))
                 ->with('booking.mobil')->latest()->paginate(10);
 
-        return view('pembayaran.index', compact('pembayarans'));
+        // Booking milik user yang belum ada pembayarannya (menunggu dibayar)
+        $bookingBelumBayar = $user->hasRole('admin')
+            ? collect()
+            : Booking::where('user_id', $user->id)
+                ->whereDoesntHave('pembayaran')
+                ->with('mobil')
+                ->latest()
+                ->get();
+
+        return view('pembayaran.index', compact('pembayarans', 'bookingBelumBayar'));
     }
 
     public function create(Request $request)
@@ -33,24 +46,35 @@ class PembayaranController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'booking_id' => 'required|exists:bookings,id',
-            'metode_bayar' => 'required|string',
-            'jumlah_bayar' => 'required|numeric',
+            'metode_bayar' => 'required|in:transfer_bank,e_wallet,qris',
+            'jumlah_bayar' => 'required|numeric|min:1',
+            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ], [
+            'metode_bayar.in' => 'Pilih metode pembayaran yang tersedia.',
+            'bukti_pembayaran.required' => 'Unggah bukti pembayaran terlebih dahulu.',
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        Pembayaran::create([
+        $buktiPath = $request->file('bukti_pembayaran')->store('bukti-pembayaran', 'public');
+
+        $pembayaran = Pembayaran::create([
             'booking_id' => $request->booking_id,
             'tanggal_bayar' => now(),
             'metode_bayar' => $request->metode_bayar,
             'jumlah_bayar' => $request->jumlah_bayar,
-            'status_bayar' => 'lunas',
+            'status_bayar' => 'pending',
+            'bukti_pembayaran' => $buktiPath,
         ]);
 
-        Booking::where('id', $request->booking_id)->update(['status' => 'berjalan']);
+        // Kirim notifikasi ke semua admin bahwa ada pembayaran baru yang perlu diverifikasi
+        $pembayaran->load('booking.mobil', 'booking.user');
+        $admins = User::all()->filter(fn ($u) => $u->hasRole('admin'));
+        Notification::send($admins, new PembayaranBaruNotification($pembayaran));
 
-        return redirect()->route('pembayaran.index')->with('status', 'Pembayaran berhasil dicatat.');
+        return redirect()->route('pembayaran.index')
+            ->with('status', 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.');
     }
 }

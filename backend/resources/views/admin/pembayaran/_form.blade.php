@@ -2,51 +2,112 @@
     $p = $pembayaran ?? null;
 @endphp
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-    <div class="sm:col-span-2">
-        <label class="block text-sm font-medium text-slate-700 mb-1.5">Booking</label>
-        <select name="booking_id" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-amber-400 focus:ring-amber-400 focus:outline-none focus:ring-1">
-            <option value="">-- Pilih Booking --</option>
-            @foreach ($bookings as $booking)
-                <option value="{{ $booking->id }}" @selected(old('booking_id', $p->booking_id ?? '') == $booking->id)>
-                    #{{ $booking->id }} — {{ $booking->mobil->nama_mobil ?? '-' }} ({{ $booking->user->name ?? '-' }}) — Rp{{ number_format($booking->total_harga, 0, ',', '.') }}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+    <div class="md:col-span-2">
+        <label class="block mb-2 font-medium">
+            Booking
+        </label>
+
+        <select name="booking_id" class="w-full border rounded-lg px-3 py-2">
+            <option value="">Pilih Booking</option>
+
+            @foreach($bookings as $booking)
+                <option
+                    value="{{ $booking->id }}"
+                    @selected(old('booking_id',$p->booking_id ?? '')==$booking->id)
+                >
+                    Booking #{{ $booking->id }}
+                    -
+                    {{ $booking->user->name }}
+                    -
+                    {{ $booking->mobil->nama_mobil }}
+                    -
+                    Rp{{ number_format($booking->total_harga,0,',','.') }}
                 </option>
             @endforeach
+
         </select>
-        @error('booking_id') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+
+        @error('booking_id')
+            <small class="text-red-600">{{ $message }}</small>
+        @enderror
     </div>
 
-    <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1.5">Tanggal Bayar</label>
-        <input type="date" name="tanggal_bayar" value="{{ old('tanggal_bayar', isset($p->tanggal_bayar) ? \Carbon\Carbon::parse($p->tanggal_bayar)->format('Y-m-d') : now()->format('Y-m-d')) }}"
-               class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-amber-400 focus:ring-amber-400 focus:outline-none focus:ring-1">
-        @error('tanggal_bayar') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
-    </div>
 
     <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1.5">Metode Bayar</label>
-        <input type="text" name="metode_bayar" value="{{ old('metode_bayar', $p->metode_bayar ?? '') }}"
-               class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-amber-400 focus:ring-amber-400 focus:outline-none focus:ring-1"
-               placeholder="Contoh: Transfer Bank, QRIS, Tunai">
-        @error('metode_bayar') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+        <label class="block mb-2 font-medium">
+            Tanggal Bayar
+        </label>
+
+        <input
+            type="date"
+            name="tanggal_bayar"
+            class="w-full border rounded-lg px-3 py-2"
+            value="{{ old('tanggal_bayar',$p->tanggal_bayar ?? now()->format('Y-m-d')) }}"
+        >
+
+        @error('tanggal_bayar')
+            <small class="text-red-600">{{ $message }}</small>
+        @enderror
     </div>
 
-    <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1.5">Jumlah Bayar (Rp)</label>
-        <input type="number" step="1000" min="0" name="jumlah_bayar" value="{{ old('jumlah_bayar', $p->jumlah_bayar ?? '') }}"
-               class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-amber-400 focus:ring-amber-400 focus:outline-none focus:ring-1">
-        @error('jumlah_bayar') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
-    </div>
 
     <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1.5">Status Pembayaran</label>
-        <select name="status_bayar" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-amber-400 focus:ring-amber-400 focus:outline-none focus:ring-1">
-            @foreach (['pending', 'lunas', 'gagal'] as $status)
-                <option value="{{ $status }}" @selected(old('status_bayar', $p->status_bayar ?? 'pending') == $status)>
-                    {{ ucfirst($status) }}
-                </option>
-            @endforeach
+        <label class="block mb-2 font-medium">
+            Metode Pembayaran
+        </label>
+
+        <select
+            name="metode_bayar"
+            class="w-full border rounded-lg px-3 py-2"
+        >
+            <option value="Transfer Bank">Transfer Bank</option>
+            <option value="QRIS">QRIS</option>
+            <option value="Cash">Cash</option>
         </select>
-        @error('status_bayar') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+
+        @error('metode_bayar')
+            <small class="text-red-600">{{ $message }}</small>
+        @enderror
     </div>
+
+
+    <div>
+        <label class="block mb-2 font-medium">
+            Jumlah Bayar
+        </label>
+
+        <input
+            type="number"
+            name="jumlah_bayar"
+            class="w-full border rounded-lg px-3 py-2"
+            value="{{ old('jumlah_bayar',$p->jumlah_bayar ?? '') }}"
+        >
+
+        @error('jumlah_bayar')
+            <small class="text-red-600">{{ $message }}</small>
+        @enderror
+    </div>
+
+
+    <div>
+        <label class="block mb-2 font-medium">
+            Status Pembayaran
+        </label>
+
+        <select
+            name="status_bayar"
+            class="w-full border rounded-lg px-3 py-2"
+        >
+            <option value="pending">Pending</option>
+            <option value="lunas">Lunas</option>
+            <option value="gagal">Gagal</option>
+        </select>
+
+        @error('status_bayar')
+            <small class="text-red-600">{{ $message }}</small>
+        @enderror
+    </div>
+
 </div>

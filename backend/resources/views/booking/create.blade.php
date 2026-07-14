@@ -65,6 +65,27 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">Metode Pembayaran</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="flex items-center gap-3 rounded-xl border border-neutral-200 px-4 py-3 text-sm cursor-pointer has-[:checked]:border-amber-400 has-[:checked]:bg-amber-50">
+                                <input type="radio" name="metode_pembayaran" value="tunai"
+                                       {{ old('metode_pembayaran') == 'tunai' ? 'checked' : '' }}
+                                       class="text-amber-500 focus:ring-amber-400" required>
+                                <span>Tunai</span>
+                            </label>
+                            <label class="flex items-center gap-3 rounded-xl border border-neutral-200 px-4 py-3 text-sm cursor-pointer has-[:checked]:border-amber-400 has-[:checked]:bg-amber-50">
+                                <input type="radio" name="metode_pembayaran" value="virtual"
+                                       {{ old('metode_pembayaran') == 'virtual' ? 'checked' : '' }}
+                                       class="text-amber-500 focus:ring-amber-400" required>
+                                <span>Virtual (Transfer/Online)</span>
+                            </label>
+                        </div>
+                        @error('metode_pembayaran')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <div class="flex justify-end">
                         <button type="submit" class="rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600">
                             Simpan Booking

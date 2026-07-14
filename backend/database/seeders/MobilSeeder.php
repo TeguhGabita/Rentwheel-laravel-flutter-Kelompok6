@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Mobil;
 use App\Models\KategoriMobil;
+use Faker\Factory as FakerFactory;
 
 class MobilSeeder extends Seeder
 {
@@ -63,5 +64,52 @@ class MobilSeeder extends Seeder
                 $mobil
             );
         }
+
+        // ================================================
+        // Tambahan: generate 30 data mobil dummy untuk tes pagination
+        // ================================================
+        $faker = FakerFactory::create('id_ID');
+
+        $kategoriList = collect([$cityCar, $mpv, $suv])->filter(); // buang null kalau ada kategori tidak ketemu
+
+        if ($kategoriList->isEmpty()) {
+            $this->command->warn('Kategori City Car / MPV / SUV tidak ditemukan. Lewati generate data dummy.');
+            return;
+        }
+
+        $merkMobil = [
+            'Honda' => ['Brio', 'Mobilio', 'HR-V', 'CR-V', 'Civic', 'Jazz'],
+            'Toyota' => ['Avanza', 'Innova', 'Fortuner', 'Rush', 'Yaris', 'Calya'],
+            'Daihatsu' => ['Xenia', 'Terios', 'Ayla', 'Sigra', 'Rocky'],
+            'Suzuki' => ['Ertiga', 'XL7', 'Baleno', 'Ignis'],
+            'Mitsubishi' => ['Xpander', 'Pajero Sport', 'Outlander'],
+            'Nissan' => ['Livina', 'Terra', 'Magnite'],
+            'Hyundai' => ['Stargazer', 'Creta', 'Palisade'],
+        ];
+
+        $statusList = ['tersedia', 'disewa', 'servis'];
+
+        for ($i = 1; $i <= 30; $i++) {
+            $merk = $faker->randomElement(array_keys($merkMobil));
+            $nama = $faker->randomElement($merkMobil[$merk]);
+            $kategori = $kategoriList->random();
+
+            $platNomor = strtoupper('D ' . $faker->numberBetween(1000, 9999) . ' ' . $faker->lexify('???'));
+
+            // pastikan plat nomor unik, hindari duplikat kalau seeder dijalankan ulang
+            Mobil::firstOrCreate(
+                ['plat_nomor' => $platNomor],
+                [
+                    'kategori_id' => $kategori->id,
+                    'nama_mobil' => $nama,
+                    'merk' => $merk,
+                    'plat_nomor' => $platNomor,
+                    'harga_sewa_per_hari' => $faker->randomElement([150000, 200000, 250000, 300000, 400000, 500000, 600000, 750000, 800000]),
+                    'status' => $faker->randomElement($statusList),
+                ]
+            );
+        }
+
+        $this->command->info('30 data mobil dummy berhasil ditambahkan.');
     }
 }

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false, notifOpen: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -39,8 +39,54 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <!-- Right side: Notifikasi + Settings Dropdown -->
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-2">
+
+                {{-- Dropdown Notifikasi --}}
+                @php
+                    $notifikasiList = auth()->user()->unreadNotifications;
+                    $jumlahNotif = $notifikasiList->count();
+                @endphp
+
+                <div class="relative">
+                    <button @click="notifOpen = !notifOpen" @click.away="notifOpen = false"
+                            class="relative p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+                        </svg>
+                        @if($jumlahNotif > 0)
+                            <span class="absolute top-0.5 right-0.5 min-w-[16px] h-4 px-1 bg-red-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+                                {{ $jumlahNotif }}
+                            </span>
+                        @endif
+                    </button>
+
+                    <div x-show="notifOpen" x-cloak
+                         class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg border border-gray-100 z-50 max-h-96 overflow-y-auto">
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                            <p class="text-sm font-semibold text-gray-800">Notifikasi</p>
+                            @if($jumlahNotif > 0)
+                                <form method="POST" action="{{ route('notifikasi.bacaSemua') }}">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-amber-600 hover:underline">
+                                        Tandai semua dibaca
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+
+                        @forelse($notifikasiList as $notif)
+                            <a href="{{ route('notifikasi.baca', $notif->id) }}"
+                               class="block px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                <p class="text-sm text-gray-700">{{ $notif->data['message'] ?? 'Notifikasi baru' }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ $notif->created_at->diffForHumans() }}</p>
+                            </a>
+                        @empty
+                            <p class="px-4 py-6 text-sm text-gray-400 text-center">Tidak ada notifikasi baru</p>
+                        @endforelse
+                    </div>
+                </div>
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -106,6 +152,27 @@
                     {{ __('Pembayaran') }}
                 </x-responsive-nav-link>
             @endif
+        </div>
+
+        <!-- Responsive Notifikasi -->
+        <div class="pt-2 pb-2 border-t border-gray-200">
+            <div class="px-4 flex items-center justify-between">
+                <span class="font-medium text-sm text-gray-600">Notifikasi</span>
+                @if($jumlahNotif > 0)
+                    <span class="text-xs bg-red-500 text-white rounded-full px-2 py-0.5">{{ $jumlahNotif }}</span>
+                @endif
+            </div>
+            <div class="mt-2 space-y-1">
+                @forelse($notifikasiList as $notif)
+                    <a href="{{ route('notifikasi.baca', $notif->id) }}"
+                       class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">
+                        {{ $notif->data['message'] ?? 'Notifikasi baru' }}
+                        <span class="block text-xs text-gray-400">{{ $notif->created_at->diffForHumans() }}</span>
+                    </a>
+                @empty
+                    <p class="px-4 text-sm text-gray-400">Tidak ada notifikasi baru</p>
+                @endforelse
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->

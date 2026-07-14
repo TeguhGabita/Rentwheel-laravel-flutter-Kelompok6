@@ -10,19 +10,19 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('bookings', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('mobil_id')->constrained()->onDelete('cascade');
-        $table->foreignId('pelanggan_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->date('tanggal_mulai');
-        $table->date('tanggal_selesai');
-        $table->decimal('total_harga', 12, 2);
-        $table->enum('status', ['dipesan','berjalan','selesai','batal'])->default('dipesan');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('mobil_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_selesai');
+            $table->decimal('total_harga', 12, 2);
+            $table->enum('metode_pembayaran', ['tunai', 'virtual'])->default('virtual');
+            $table->enum('status', ['dipesan','berjalan','selesai','batal'])->default('dipesan');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

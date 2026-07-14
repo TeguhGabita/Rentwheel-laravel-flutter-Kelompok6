@@ -21,11 +21,19 @@ class MobilController extends Controller
                         ->orWhere('plat_nomor', 'like', "%{$search}%");
                 });
             })
+            ->when($request->kategori_id, function ($query, $kategoriId) {
+                $query->where('kategori_id', $kategoriId);
+            })
+            ->when($request->status, function ($query, $status) {
+                $query->where('status', $status);
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.mobil.index', compact('mobils'));
+        $kategoris = KategoriMobil::orderBy('nama_kategori')->get();
+
+        return view('admin.mobil.index', compact('mobils', 'kategoris'));
     }
 
     public function create()

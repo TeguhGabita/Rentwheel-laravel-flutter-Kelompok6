@@ -50,6 +50,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         // Redirect to user's beranda instead of admin dashboard
-        return redirect(route('beranda', absolute: false));
+        return redirect(route('beranda', absolute: false))
+            ->with('status', 'Registrasi berhasil! Selamat datang, '.$user->name.'.');
     }
 }

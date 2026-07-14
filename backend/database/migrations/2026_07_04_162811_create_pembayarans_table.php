@@ -12,12 +12,12 @@ return new class extends Migration
     public function up()
 {
     Schema::create('pembayarans', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('booking_id')->constrained()->onDelete('cascade');
+        $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
         $table->date('tanggal_bayar');
+        $table->decimal('jumlah_bayar',12,2);
         $table->string('metode_bayar');
-        $table->integer('jumlah_bayar');
-        $table->enum('status_bayar', ['pending', 'lunas', 'gagal'])->default('pending');
+        $table->enum('status_bayar',['pending','lunas','gagal'])->default('pending');
+        $table->string('bukti_pembayaran')->nullable();
         $table->timestamps();
     });
 

@@ -10,6 +10,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .font-display { font-family: 'Space Grotesk', sans-serif; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="antialiased bg-[#f4f4f6]">
@@ -31,12 +32,51 @@
 
                 <!-- User menu -->
                 <div class="flex items-center gap-4">
-                    <button class="relative p-2 rounded-lg hover:bg-white/5 transition-colors">
-                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
-                        </svg>
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full"></span>
-                    </button>
+
+                    {{-- Dropdown Notifikasi --}}
+                    @php
+                        $notifikasiList = auth()->user()->unreadNotifications;
+                        $jumlahNotif = $notifikasiList->count();
+                    @endphp
+
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" @click.away="open = false"
+                                class="relative p-2 rounded-lg hover:bg-white/5 transition-colors">
+                            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+                            </svg>
+                            @if($jumlahNotif > 0)
+                                <span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-amber-500 rounded-full text-[10px] font-bold text-slate-900 flex items-center justify-center">
+                                    {{ $jumlahNotif }}
+                                </span>
+                            @endif
+                        </button>
+
+                        <div x-show="open" x-cloak
+                             class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-slate-200 z-50 max-h-96 overflow-y-auto">
+                            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                                <p class="text-sm font-semibold text-slate-900">Notifikasi</p>
+                                @if($jumlahNotif > 0)
+                                    <form method="POST" action="{{ route('notifikasi.bacaSemua') }}">
+                                        @csrf
+                                        <button type="submit" class="text-xs text-amber-600 hover:underline">
+                                            Tandai semua dibaca
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+
+                            @forelse($notifikasiList as $notif)
+                                <a href="{{ route('notifikasi.baca', $notif->id) }}"
+                                   class="block px-4 py-3 border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                                    <p class="text-sm text-slate-700">{{ $notif->data['message'] ?? 'Notifikasi baru' }}</p>
+                                    <p class="text-xs text-slate-400 mt-1">{{ $notif->created_at->diffForHumans() }}</p>
+                                </a>
+                            @empty
+                                <p class="px-4 py-6 text-sm text-slate-400 text-center">Tidak ada notifikasi baru</p>
+                            @endforelse
+                        </div>
+                    </div>
 
                     <div class="hidden sm:flex items-center gap-2.5">
                         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-slate-900 font-bold text-xs flex-shrink-0">
@@ -110,16 +150,72 @@
             </nav>
         </header>
 
-        <!-- Page header -->
-        <div class="bg-white border-b border-slate-200 px-8 py-5">
-            <h1 class="font-display text-xl font-bold text-slate-900">{{ $title ?? 'Dashboard' }}</h1>
-            <p class="text-sm text-slate-500">{{ $subtitle ?? 'Ringkasan aktivitas RentWheel' }}</p>
-        </div>
+       <!-- Page header -->
+<div class="bg-white border-b border-slate-200 px-8 py-5">
+    <h1 class="font-display text-xl font-bold text-slate-900">
+        {{ $title ?? 'Dashboard' }}
+    </h1>
 
-        <!-- Page content -->
-        <main class="flex-1 p-8">
-            {{ $slot }}
-        </main>
-    </div>
+    @isset($subtitle)
+        <p class="text-sm text-slate-500 mt-1">
+            {{ $subtitle }}
+        </p>
+    @endisset
+</div>
+
+<!-- Page content -->
+<main class="flex-1 p-8">
+    {{ $slot }}
+</main>
+
+</div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Flash Message Handler -->
+@if (session('status'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: @json(session('status')),
+            timer: 2000,
+            showConfirmButton: false
+        });
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: @json(session('error')),
+            confirmButtonColor: '#d33'
+        });
+    });
+</script>
+@endif
+
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal!',
+            html: @json(implode('<br>', $errors->all())),
+            confirmButtonColor: '#d33'
+        });
+    });
+</script>
+@endif
+
+{{-- Tempat script tambahan dari halaman anak (misal Chart.js di dashboard) --}}
+@stack('scripts')
+
 </body>
 </html>

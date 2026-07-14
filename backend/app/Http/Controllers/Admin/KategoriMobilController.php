@@ -15,7 +15,24 @@ class KategoriMobilController extends Controller
             ->when($request->search, function ($query, $search) {
                 $query->where('nama_kategori', 'like', "%{$search}%");
             })
-            ->latest()
+            ->when($request->urutan, function ($query, $urutan) {
+                switch ($urutan) {
+                    case 'nama_asc':
+                        $query->orderBy('nama_kategori', 'asc');
+                        break;
+                    case 'nama_desc':
+                        $query->orderBy('nama_kategori', 'desc');
+                        break;
+                    case 'mobil_terbanyak':
+                        $query->orderBy('mobils_count', 'desc');
+                        break;
+                    default:
+                        $query->latest();
+                        break;
+                }
+            }, function ($query) {
+                $query->latest();
+            })
             ->paginate(10)
             ->withQueryString();
 

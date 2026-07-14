@@ -8,24 +8,45 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\MobilController as AdminMobilController;
 use App\Http\Controllers\Admin\KategoriMobilController as AdminKategoriMobilController;
 use App\Http\Controllers\Admin\LaporanController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+/*
+|--------------------------------------------------------------------------
+| Public
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
-    Route::resource('admin/users', UserController::class)->names('admin.users');
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 });
 
-Route::get('/beranda', function () {
-    return view('beranda.index');
-})->middleware(['auth', 'verified', 'role:user'])->name('beranda');
+/*
+|--------------------------------------------------------------------------
+| Beranda User
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/beranda', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified', 'role:user'])
+    ->name('beranda');
+
+/*
+|--------------------------------------------------------------------------
+| Profile
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,7 +54,35 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Notifikasi (Admin & User)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
+    Route::get('/notifikasi/{id}/baca', function (\Illuminate\Http\Request $request, $id) {
+        $notif = $request->user()->notifications()->findOrFail($id);
+        $notif->markAsRead();
+
+        return redirect($notif->data['url'] ?? '/');
+    })->name('notifikasi.baca');
+
+    Route::post('/notifikasi/baca-semua', function (\Illuminate\Http\Request $request) {
+        $request->user()->unreadNotifications->markAsRead();
+
+        return back();
+    })->name('notifikasi.bacaSemua');
+});
+
+/*
+|--------------------------------------------------------------------------
+| User
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/mobil', [MobilController::class, 'index'])->name('mobil.index');
     Route::get('/mobil/{mobil}', [MobilController::class, 'show'])->name('mobil.show');
 
@@ -47,14 +96,47 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
 });
 
-Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('mobil', AdminMobilController::class)->except('show');
-    Route::resource('kategori', AdminKategoriMobilController::class)->except('show');
-    
-    // Laporan routes (includes pembayaran)
-    Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
-    Route::get('laporan/pembayaran', [LaporanController::class, 'pembayaran'])->name('laporan.pembayaran');
-    Route::post('laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
-});
+/*
+|--------------------------------------------------------------------------
+| Admin
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'verified', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        // Dashboard Admin
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // User
+        Route::resource('users', UserController::class);
+
+        // Mobil
+        Route::resource('mobil', AdminMobilController::class)->except('show');
+
+        // Kategori
+        Route::resource('kategori', AdminKategoriMobilController::class)->except('show');
+
+        // Laporan Booking
+        Route::get('laporan', [LaporanController::class, 'index'])
+            ->name('laporan.index');
+
+        Route::post('laporan/cetak', [LaporanController::class, 'cetak'])
+            ->name('laporan.cetak');
+
+        // Update status booking (dari halaman Laporan)
+        Route::patch('laporan/{booking}/status', [LaporanController::class, 'updateStatus'])
+            ->name('laporan.updateStatus');
+
+        // Update status pembayaran (dari halaman Laporan) - baris baru
+        Route::patch('laporan/{booking}/status-bayar', [LaporanController::class, 'updateStatusBayar'])
+            ->name('laporan.updateStatusBayar');
+
+        // Data Pembayaran Admin
+        Route::resource('pembayaran', \App\Http\Controllers\Admin\PembayaranController::class);
+    });
 
 require __DIR__.'/auth.php';

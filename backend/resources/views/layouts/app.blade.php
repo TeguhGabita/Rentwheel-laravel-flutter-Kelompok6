@@ -13,6 +13,9 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -32,5 +35,46 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <!-- Flash Message Handler -->
+        @if (session('status'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: @json(session('status')),
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        @endif
+
+        @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: @json(session('error')),
+                    confirmButtonColor: '#d33'
+                });
+            });
+        </script>
+        @endif
+
+        @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal!',
+                    html: @json(implode('<br>', $errors->all())),
+                    confirmButtonColor: '#d33'
+                });
+            });
+        </script>
+        @endif
     </body>
 </html>
