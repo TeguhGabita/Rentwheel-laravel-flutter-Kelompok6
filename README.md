@@ -252,20 +252,11 @@ Sesuaikan `baseUrl` di `lib/services/api_service.dart` dengan alamat backend:
 ## Screenshot
 
 
-## Log Aktivitas
-
-| Nama                       | Tanggal      | Jam Selesai | Aktivitas                                                                |
-|----------------------------|--------------|-------------|---------------------------------------------------------------------------|
-| M. Teguh Gabita            | 3 Juli 2026  | 22:50       | Setup environment Laragon & MySQL, perbaikan koneksi database (access denied & unknown database), pembuatan database `rentwheel`, review ERD awal, konfigurasi Mailtrap |
-| M. Teguh Gabita            | 4 Juli 2026  | 17:05       | Restrukturisasi ERD — hapus tabel `pelanggans`, konsolidasi ke `users` dengan role Admin/User; migrasi database; pembuatan REST API (`AuthController`, `MobilController`, `BookingController`, `PembayaranController`) untuk integrasi Flutter via Sanctum |
-| M. Teguh Gabita            | 5 Juli 2026  | 14:10       | Setup project, debugging REST API (autentikasi, testing endpoint) via Postman, setup database, tampilan dashboard, push GitHub |
-| Fauzi Ardiansyah           | 9 Juli 2026  | 22:39       | Menambahkan fitur CRUD admin pada sistem web dan tampilan dasboard admin                                                                          |
-| Luthfi Rizalul Fikri       |              |             |                                                                           |
-| Fahmy Muhammad Nurfadilah           |              |             |                                                                           |
 
 
-## Tim
-- M. Teguh Gabita (200102078) — Ketua Tim / Backend Lead (Setup, Migration & Seeder, Autentikasi, Role & Permission, Git Workflow)
-- Luthfi Rizalul Fikri (230102066) — CRUD Mobil & Kategori
-- Fauzi Ardiansyah (230102048) — CRUD Booking & Pembayaran
-- Fahmy Muhammad Nurfadilah (230102043) — Dashboard, REST API, UI/UX
+## Tim Pengembang
+- M. Teguh Gabita (200102078) 
+- Luthfi Rizalul Fikri (230102066) 
+- Fauzi Ardiansyah (230102048) 
+- Fahmy Muhammad Nurfadilah (230102043) 
+- Wijdan Fakhri Syauqi -(230102126)
