@@ -148,8 +148,9 @@ _Screenshot dapat ditambahkan di sini._
 
 | Tautan | Keterangan |
 |---|---|
-| ▶️ [https://youtu.be/ejaM3jwEkXcVideo Demo (YouTube)](#) | Demo seluruh fitur web & mobile |
-| 📊 [https://www.canva.com/design/DAHPWIO-w0o/wJH9d91z-QT66nxOUQKjTg/editSlide Presentasi (Canva)](#) | Slide presentasi tugas besar |
+| ▶️|[Video Demo (YouTube)](https://youtu.be/ejaM3jwEkXc) | Demo seluruh fitur web & mobile |
+| 📊 [Slide Presentasi (Canva)](https://www.canva.com/design/DAHPWIO-w0o/wJH9d91z-QT66nxOUQKjTg/edit) | Slide presentasi tugas besar |
+Presentasi (Canva)](#) | Slide presentasi tugas besar |
 
 ## 📄 Laporan
 
